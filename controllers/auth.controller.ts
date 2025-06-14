@@ -248,3 +248,34 @@ export const updateUser = asyncHandler(
     }
   }
 );
+
+export const forgetPassword = asyncHandler(
+  async (req: Request, res: Response) => {
+    try {
+      const { email, password } = req.body;
+
+      if (!email) {
+        throw new ApiError(400, "Email is required");
+      }
+      if (!password) {
+        throw new ApiError(400, "Password is required");
+      }
+
+      const user = await User.findOne({ email });
+      if (!user) {
+        throw new ApiError(404, "User not found");
+      }
+
+      user.password = password;
+
+      await user.save();
+
+      res
+        .status(200)
+        .json(new ApiResponse(200, user, "Password reset successfully"));
+    } catch (error) {
+      console.error("Error in forgetPassword:", error);
+      throw new ApiError(500, "Internal server error");
+    }
+  }
+);

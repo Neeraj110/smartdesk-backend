@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+  forgetPassword,
   getCurrentUser,
   googleLogin,
   login,
@@ -15,6 +16,7 @@ const router = Router();
 router.post("/google-login", googleLogin);
 router.post("/login", login);
 router.post("/register", register);
+router.post("/reset-password", forgetPassword);
 
 router.use(authMiddleware);
 router.get("/current-user", getCurrentUser);
