@@ -88,6 +88,7 @@ Ensure the learning builds progressively across the ${durationDays} days.`;
         durationDays,
         dailyPlan: parsedResponse.dailyPlan.map((plan, index) => ({
           title: plan.title || `Day ${index + 1}`,
+          day: index + 1,
           description: plan.description || "Learning objectives for the day",
           resources: Array.isArray(plan.resources)
             ? plan.resources
