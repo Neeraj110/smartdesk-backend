@@ -38,7 +38,7 @@ export const getStats = asyncHandler(
         completed: false,
       });
 
-      res.status(200).json(
+   return   res.status(200).json(
         new ApiResponse(
           200,
           {

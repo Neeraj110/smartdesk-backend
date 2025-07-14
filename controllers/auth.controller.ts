@@ -38,7 +38,7 @@ export const register = asyncHandler(async (req: Request, res: Response) => {
       authProvider: "local",
     });
 
-    res
+ return   res
       .status(201)
       .json(new ApiResponse(201, newUser, "User registered successfully"));
   } catch (error) {
@@ -79,7 +79,7 @@ export const login = asyncHandler(async (req: Request, res: Response) => {
       updatedAt: user.updatedAt,
     };
 
-    res
+   return res
       .cookie("token", token, options)
       .status(200)
       .json(new ApiResponse(200, userResponse, "Login successful"));
@@ -144,7 +144,7 @@ export const googleLogin = asyncHandler(async (req: Request, res: Response) => {
     if (!token) {
       throw new ApiError(500, "Failed to create authentication token");
     }
-    res
+    return res
       .cookie("token", token, options)
       .status(200)
       .json(new ApiResponse(200, userResponse, "Google login successful"));
@@ -163,7 +163,7 @@ export const logout = asyncHandler(
         throw new ApiError(401, "User not authenticated");
       }
 
-      res
+      return res
         .clearCookie("token", options)
         .status(200)
         .json(new ApiResponse(200, null, "Logout successful"));
@@ -194,7 +194,7 @@ export const getCurrentUser = asyncHandler(
         updatedAt: user?.updatedAt,
       };
 
-      res
+      return res
         .status(200)
         .json(new ApiResponse(200, userResponse, "User retrieved"));
     } catch (error) {
@@ -239,7 +239,7 @@ export const updateUser = asyncHandler(
         updatedAt: updatedUser.updatedAt,
       };
 
-      res
+      return res
         .status(200)
         .json(new ApiResponse(200, userResponse, "User updated successfully"));
     } catch (error) {
@@ -270,7 +270,7 @@ export const forgetPassword = asyncHandler(
 
       await user.save();
 
-      res
+      return res
         .status(200)
         .json(new ApiResponse(200, user, "Password reset successfully"));
     } catch (error) {

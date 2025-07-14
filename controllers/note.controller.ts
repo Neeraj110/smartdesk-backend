@@ -138,7 +138,7 @@ export const summarienote = asyncHandler(
       downloadedPdf: false,
     });
 
-    res
+    return res
       .status(200)
       .json(
         new ApiResponse(200, note, "Note uploaded and summarized successfully")
@@ -198,7 +198,7 @@ export const updatenote = asyncHandler(
       { new: true }
     );
 
-    res
+    return res
       .status(200)
       .json(new ApiResponse(200, updatedNote, "Note updated successfully"));
   }
@@ -218,7 +218,7 @@ export const deletenote = asyncHandler(
     if (note.originalNote) await deleteFileFromCloudinary(note.originalNote);
     await Notes.findByIdAndDelete(id);
 
-    res
+    return res
       .status(200)
       .json(new ApiResponse(200, null, "Note deleted successfully"));
   }
@@ -231,10 +231,10 @@ export const getnotes = asyncHandler(
       .lean();
 
     if (!notes || notes.length === 0) {
-      throw new ApiError(404, "No notes found for this user");
+      return res.status(404).json(new ApiResponse(404, null, "No notes found"));
     }
 
-    res
+    return res
       .status(200)
       .json(new ApiResponse(200, notes, "Notes retrieved successfully"));
   }
