@@ -9,9 +9,7 @@ import AiLearning from "../models/aiLearning.model";
 import { GoogleGenAI, GenerateContentResponse } from "@google/genai";
 import { IDailyPlan } from "../types/type";
 
-const gemini = new GoogleGenAI({
-  apiKey: process.env.GEMINI_API_KEY_2!,
-});
+const gemini = new GoogleGenAI({});
 
 interface ParsedResponse {
   dailyPlan: IDailyPlan[];
@@ -48,21 +46,11 @@ Ensure the learning builds progressively across the ${durationDays} days.`;
     try {
       const response: GenerateContentResponse =
         await gemini.models.generateContent({
-          model: "gemini-2.0-flash",
-          contents: [
-            {
-              role: "user",
-              parts: [{ text: prompt }],
-            },
-          ],
-          config: {
-            maxOutputTokens: 2000,
-            temperature: 0.7,
-          },
+          model: "gemini-3-flash-preview",
+          contents: prompt,
         });
 
-      const aiResponse =
-        response?.candidates?.[0]?.content?.parts?.[0]?.text?.trim();
+      const aiResponse = response.text?.trim();
 
       if (!aiResponse) throw new ApiError(500, "AI did not return any content");
 

@@ -13,9 +13,7 @@ import mammoth from "mammoth";
 import pdfParse from "pdf-parse";
 import { GoogleGenAI, GenerateContentResponse } from "@google/genai";
 
-const gemini = new GoogleGenAI({
-  apiKey: process.env.GOOGLE_GEN_AI_API_KEY!,
-});
+const gemini = new GoogleGenAI({});
 
 const getSummaryWordCount = (length: string): string => {
   const map: Record<string, string> = {
@@ -52,28 +50,11 @@ const generateSummary = async (
   try {
     const response: GenerateContentResponse =
       await gemini.models.generateContent({
-        model: "gemini-2.0-flash",
-        contents: [
-          {
-            role: "user",
-            parts: [
-              {
-                text: `Summarize the following text in approximately ${wordCount} words:\n\n${text}`,
-              },
-            ],
-          },
-        ],
-        config: {
-          maxOutputTokens: 500,
-          temperature: 0.5,
-        },
+        model: "gemini-3-flash-preview",
+        contents: `Summarize the following text in approximately ${wordCount} words:\n\n${text}`,
       });
 
-    if (!response?.candidates?.length) {
-      throw new ApiError(500, "No summary generated from Gemini");
-    }
-
-    const summary = response.candidates[0]?.content?.parts?.[0]?.text?.trim();
+    const summary = response.text?.trim();
     if (!summary) {
       throw new ApiError(500, "Failed to extract summary from Gemini response");
     }
